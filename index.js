@@ -14,53 +14,52 @@ const addButtonEl = document.getElementById("add-button")
 const shoppingListEl = document.getElementById("shopping-list")
 
 addButtonEl.addEventListener("click", function () {
-    let inputValue = inputFieldEl.value
+    let inputValue = inputFieldEl.value.trim();
 
-    push(shoppingListInDB, inputValue)
-
+    if (inputValue !=="") {
+    push(shoppingListInDB, inputValue);
     clearInputFieldEl()
-})
+}
+});
 
 onValue(shoppingListInDB, function (snapshot) {
-
     if (snapshot.exists()) {
-        let itemsArray = Object.entries(snapshot.val())
+        let itemsArray = Object.entries(snapshot.val());
 
-        clearShoppingListEl()
+        clearShoppingListEl();
 
         for (let i = 0; i < itemsArray.length; i++) {
-            let currentItem = itemsArray[i]
-            let currentItemID = currentItem[0]
-            let currentItemValue = currentItem[1]
+            let currentItem = itemsArray[i];
+            let currentItemID = currentItem[0];
+            let currentItemValue = currentItem[1];
 
-            appendItemToShoppingListEl(currentItem)
+            appendItemToShoppingListEl(currentItem);
         }
     } else {
-        shoppingListEl.innerHTML = "No items here... yet"
+        shoppingListEl.innerHTML = "No items here... yet";
     }
 })
-
 function clearShoppingListEl() {
-    shoppingListEl.innerHTML = ""
+    shoppingListEl.innerHTML = "";
 }
 
 function clearInputFieldEl() {
-    inputFieldEl.value = ""
+    inputFieldEl.value = "";
 }
 
 function appendItemToShoppingListEl(item) {
     let itemID = item[0]
     let itemValue = item[1]
 
-    let newEl = document.createElement("li")
+    let newEl = document.createElement("li");
 
-    newEl.textContent = itemValue
+    newEl.textContent = itemValue;
 
     newEl.addEventListener("click", function () {
-        let exactLocationOfItemInDB = ref(database, `shoppingList/${itemID}`)
+        let exactLocationOfItemInDB = ref(database, `shoppingList/${itemID}`);
 
         remove(exactLocationOfItemInDB)
-    })
+    });
 
-    shoppingListEl.append(newEl)
+    shoppingListEl.append(newEl);
 }
